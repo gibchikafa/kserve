@@ -25,6 +25,7 @@ from .v2_datamodels import (
 from ..dataplane import DataPlane
 from ..model_repository_extension import ModelRepositoryExtension
 from ...errors import ModelNotReady
+import logging
 
 
 class V2Endpoints:
@@ -154,6 +155,7 @@ class V2Endpoints:
 
         if response_headers:
             raw_response.headers.update(response_headers)
+        logging.info(response)
         res = InferenceResponse.parse_obj(response)
         return res
 
