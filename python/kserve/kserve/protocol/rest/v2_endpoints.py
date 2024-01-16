@@ -25,7 +25,7 @@ from .v2_datamodels import (
 from ..dataplane import DataPlane
 from ..model_repository_extension import ModelRepositoryExtension
 from ...errors import ModelNotReady
-import logging
+import inspect
 
 
 class V2Endpoints:
@@ -148,15 +148,13 @@ class V2Endpoints:
         response, response_headers = await self.dataplane.infer(model_name=model_name,
                                                                 request=infer_request,
                                                                 headers=request_headers)
-
+        response = await response if inspect.iscoroutinefunction(response) or inspect.iscoroutine(response) else response
         response, response_headers = self.dataplane.encode(model_name=model_name,
                                                            response=response,
                                                            headers=response_headers, req_attributes={})
 
         if response_headers:
             raw_response.headers.update(response_headers)
-        logging.info("Received back response")
-        logging.info(response)
         res = InferenceResponse.parse_obj(response)
         return res
 
