@@ -155,6 +155,7 @@ class V2Endpoints:
 
         if response_headers:
             raw_response.headers.update(response_headers)
+        logging.info("Received back response")
         logging.info(response)
         res = InferenceResponse.parse_obj(response)
         return res
